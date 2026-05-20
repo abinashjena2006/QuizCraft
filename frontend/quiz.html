@@ -246,6 +246,13 @@
     let score = 0;
     let timeLeft = 15;
     let timer;
+    const correctSound = new Audio(
+'https://www.soundjay.com/buttons/sounds/button-09.mp3'
+);
+
+const wrongSound = new Audio(
+'https://www.soundjay.com/buttons/sounds/button-10.mp3'
+);
 
     const questionEl = document.getElementById("question");
     const optionsEl = document.getElementById("options");
@@ -322,12 +329,15 @@
       });
 
       if(selected === correctAnswer){
+        correctSound.play();
 
         score += 10;
 
         element.classList.add("correct");
 
       }else{
+
+        wrongSound.play();
 
         element.classList.add("wrong");
 
