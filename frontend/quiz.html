@@ -52,19 +52,6 @@
       padding:10px 18px;
       border-radius:10px;
       font-weight:bold;
-      animation:pulse 1s infinite;
-    }
-
-    @keyframes pulse{
-      0%{
-        transform:scale(1);
-      }
-      50%{
-        transform:scale(1.05);
-      }
-      100%{
-        transform:scale(1);
-      }
     }
 
     .progress-bar{
@@ -77,9 +64,10 @@
     }
 
     .progress{
-      width:40%;
       height:100%;
       background:#38bdf8;
+      width:0%;
+      transition:0.3s;
     }
 
     .question{
@@ -107,6 +95,15 @@
       transform:translateX(8px);
       border-color:#38bdf8;
       background:rgba(56,189,248,0.15);
+    }
+
+    .option.correct{
+      background:#22c55e;
+      color:black;
+    }
+
+    .option.wrong{
+      background:#ef4444;
     }
 
     .bottom{
@@ -169,59 +166,200 @@
 
     <div class="top-bar">
 
-      <div class="question-count">
-        Question 4 / 10
+      <div class="question-count" id="question-count">
+        Question 1 / 5
       </div>
 
-      <div class="timer">
-        ⏳ 00:25
+      <div class="timer" id="timer">
+        ⏳ 15
       </div>
 
     </div>
 
     <div class="progress-bar">
-      <div class="progress"></div>
+      <div class="progress" id="progress"></div>
     </div>
 
-    <div class="question">
-      Which language is primarily used for modern web development?
+    <div class="question" id="question">
+      Question Here
     </div>
 
-    <div class="options">
-
-      <div class="option">
-        A. Python
-      </div>
-
-      <div class="option">
-        B. JavaScript
-      </div>
-
-      <div class="option">
-        C. C Language
-      </div>
-
-      <div class="option">
-        D. Assembly Language
-      </div>
-
+    <div class="options" id="options">
     </div>
 
     <div class="bottom">
 
-      <div class="score">
-        Current Score: 30
+      <div class="score" id="score">
+        Score: 0
       </div>
 
-      <a href="result.html">
-  <button class="next-btn">
-    Finish Quiz →
-  </button>
-</a>
+      <button class="next-btn" id="nextBtn">
+        Next →
+      </button>
 
     </div>
 
   </div>
+
+  <script>
+
+    const quizData = [
+
+      {
+        question: "Which language is used for web development?",
+        options: ["Python","JavaScript","C","Java"],
+        answer: "JavaScript"
+      },
+
+      {
+        question: "Which database is used in this project?",
+        options: ["MongoDB","Firebase","MySQL","Oracle"],
+        answer: "MySQL"
+      },
+
+      {
+        question: "What does HTML stand for?",
+        options: [
+          "Hyper Text Markup Language",
+          "HighText Machine Language",
+          "Hyper Transfer Markup Language",
+          "None"
+        ],
+        answer: "Hyper Text Markup Language"
+      },
+
+      {
+        question: "Which language is used for backend here?",
+        options: ["Python Flask","C++","PHP","Ruby"],
+        answer: "Python Flask"
+      },
+
+      {
+        question: "Which tag is used for button in HTML?",
+        options: ["<button>","<btn>","<click>","<input>"],
+        answer: "<button>"
+      }
+
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let timeLeft = 15;
+    let timer;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const scoreEl = document.getElementById("score");
+    const nextBtn = document.getElementById("nextBtn");
+    const progressEl = document.getElementById("progress");
+    const questionCount = document.getElementById("question-count");
+    const timerEl = document.getElementById("timer");
+
+    function loadQuestion(){
+
+      clearInterval(timer);
+
+      timeLeft = 15;
+      timerEl.innerHTML = "⏳ " + timeLeft;
+
+      timer = setInterval(() => {
+
+        timeLeft--;
+
+        timerEl.innerHTML = "⏳ " + timeLeft;
+
+        if(timeLeft <= 0){
+          clearInterval(timer);
+          nextQuestion();
+        }
+
+      },1000);
+
+      const currentQuiz = quizData[currentQuestion];
+
+      questionEl.innerText = currentQuiz.question;
+
+      questionCount.innerText =
+      `Question ${currentQuestion + 1} / ${quizData.length}`;
+
+      progressEl.style.width =
+      ((currentQuestion) / quizData.length) * 100 + "%";
+
+      optionsEl.innerHTML = "";
+
+      currentQuiz.options.forEach(option => {
+
+        const div = document.createElement("div");
+
+        div.innerText = option;
+
+        div.classList.add("option");
+
+        div.addEventListener("click", () => selectAnswer(div, option));
+
+        optionsEl.appendChild(div);
+
+      });
+
+    }
+
+    function selectAnswer(element, selected){
+
+      clearInterval(timer);
+
+      const correctAnswer = quizData[currentQuestion].answer;
+
+      const options = document.querySelectorAll(".option");
+
+      options.forEach(option => {
+
+        option.style.pointerEvents = "none";
+
+        if(option.innerText === correctAnswer){
+          option.classList.add("correct");
+        }
+
+      });
+
+      if(selected === correctAnswer){
+
+        score += 10;
+
+        element.classList.add("correct");
+
+      }else{
+
+        element.classList.add("wrong");
+
+      }
+
+      scoreEl.innerText = "Score: " + score;
+
+    }
+
+    function nextQuestion(){
+
+      currentQuestion++;
+
+      if(currentQuestion < quizData.length){
+
+        loadQuestion();
+
+      }else{
+
+        localStorage.setItem("quizScore", score);
+
+        window.location.href = "result.html";
+
+      }
+
+    }
+
+    nextBtn.addEventListener("click", nextQuestion);
+
+    loadQuestion();
+
+  </script>
 
 </body>
 </html>
