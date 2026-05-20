@@ -21,7 +21,6 @@
       align-items:center;
       background:linear-gradient(135deg,#0f172a,#1e1b4b,#312e81);
       color:white;
-      overflow:hidden;
       padding:20px;
     }
 
@@ -59,10 +58,6 @@
       height:220px;
       margin:0 auto 30px;
       border-radius:50%;
-      background:conic-gradient(
-        #38bdf8 0% 80%,
-        rgba(255,255,255,0.1) 80% 100%
-      );
       display:flex;
       justify-content:center;
       align-items:center;
@@ -131,6 +126,8 @@
       font-weight:bold;
       cursor:pointer;
       transition:0.3s;
+      text-decoration:none;
+      display:inline-block;
     }
 
     .btn:hover{
@@ -169,45 +166,92 @@
 
     <h1>🎉 Quiz Completed</h1>
 
-    <div class="circle">
+    <div class="circle" id="circle">
 
       <div class="score">
-        <h2>80%</h2>
+        <h2 id="percentage">0%</h2>
         <p>Your Score</p>
       </div>
 
     </div>
 
-    <div class="message">
+    <div class="message" id="message">
       Excellent Performance 🚀
     </div>
 
     <div class="stats">
 
       <div class="stat-box">
-        <h3>8</h3>
+        <h3 id="correct">0</h3>
         <p>Correct</p>
       </div>
 
       <div class="stat-box">
-        <h3>2</h3>
+        <h3 id="wrong">0</h3>
         <p>Wrong</p>
       </div>
 
       <div class="stat-box">
-        <h3>10</h3>
+        <h3>5</h3>
         <p>Total</p>
       </div>
 
     </div>
 
-    <a href="leaderboard.html">
-  <button class="btn">
-    View Leaderboard
-  </button>
-</a>
+    <a href="leaderboard.html" class="btn">
+      View Leaderboard
+    </a>
 
   </div>
+
+  <script>
+
+    let score = localStorage.getItem("quizScore") || 0;
+
+    score = Number(score);
+
+    const totalQuestions = 5;
+
+    const correctAnswers = score / 10;
+
+    const wrongAnswers = totalQuestions - correctAnswers;
+
+    const percentage = (score / (totalQuestions * 10)) * 100;
+
+    document.getElementById("percentage").innerText =
+    percentage + "%";
+
+    document.getElementById("correct").innerText =
+    correctAnswers;
+
+    document.getElementById("wrong").innerText =
+    wrongAnswers;
+
+    const circle = document.getElementById("circle");
+
+    circle.style.background =
+    `conic-gradient(
+      #38bdf8 0% ${percentage}%,
+      rgba(255,255,255,0.1) ${percentage}% 100%
+    )`;
+
+    const message = document.getElementById("message");
+
+    if(percentage >= 80){
+
+      message.innerText = "Excellent Performance 🚀";
+
+    }else if(percentage >= 50){
+
+      message.innerText = "Good Job 😎";
+
+    }else{
+
+      message.innerText = "Keep Practicing 💪";
+
+    }
+
+  </script>
 
 </body>
 </html>
