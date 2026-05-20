@@ -3,6 +3,37 @@
 An Online Quiz and Competitive Exam Platform built using HTML, CSS, JavaScript, Python Flask, and MySQL.
 
 ---
+## 📸 Project Preview
+
+### 🏠 Homepage
+![Homepage](assets/home.png)
+
+---
+
+### 🔐 Login Page
+![Login](assets/login.png)
+
+---
+
+### 🎯 Quiz Page
+![Quiz](assets/quiz.png)
+
+---
+
+### 🏆 Result Page
+![Result](assets/result.png)
+
+---
+
+### 🥇 Leaderboard
+![Leaderboard](assets/leaderboard.png)
+
+---
+
+### 👨‍💻 Admin Dashboard
+![Admin](assets/admin.png)
+
+---
 
 ## ✨ Features : 
 - User Login & Registration
