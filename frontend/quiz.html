@@ -245,14 +245,16 @@
     let currentQuestion = 0;
     let score = 0;
     let timeLeft = 15;
-    let timer;
    const correctSound = new Audio(
-"https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"
+"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
 );
 
 const wrongSound = new Audio(
-"https://assets.mixkit.co/active_storage/sfx/2955/2955-preview.mp3"
+"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
 );
+
+correctSound.volume = 0.1;
+wrongSound.volume = 0.1;
 
     const questionEl = document.getElementById("question");
     const optionsEl = document.getElementById("options");
@@ -329,7 +331,8 @@ const wrongSound = new Audio(
       });
 
       if(selected === correctAnswer){
-        correctSound.play();
+        correctSound.currentTime = 0;
+correctSound.play();
 
         score += 10;
 
@@ -337,7 +340,8 @@ const wrongSound = new Audio(
 
       }else{
 
-        wrongSound.play();
+        wrongSound.currentTime = 0;
+wrongSound.play();
 
         element.classList.add("wrong");
 
